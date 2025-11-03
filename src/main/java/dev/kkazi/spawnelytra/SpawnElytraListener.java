@@ -71,7 +71,7 @@ public class SpawnElytraListener {
                 landingDelay.put(uuid, 5); // Start delay
             }
 
-            if (boostEnabled && flying.contains(uuid) && !boosted.contains(uuid) && player.getLastClientInput().shift() ) {
+            if (boostEnabled && flying.contains(uuid) && !boosted.contains(uuid) && player.getLastClientInput().shift() && !player.onGround()) {
                 boosted.add(uuid);
                 Vec3 lookDirection = player.getLookAngle();
                 Vec3 velocity = lookDirection.scale(multiplyValue);
