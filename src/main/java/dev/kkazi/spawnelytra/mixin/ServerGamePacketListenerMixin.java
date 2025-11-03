@@ -2,8 +2,11 @@ package dev.kkazi.spawnelytra.mixin;
 
 import dev.kkazi.spawnelytra.SpawnElytraListener;
 import net.minecraft.network.protocol.game.ServerboundPlayerAbilitiesPacket;
+import net.minecraft.network.protocol.game.ServerboundUseItemPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -26,6 +29,12 @@ public class ServerGamePacketListenerMixin {
                 SpawnElytraListener.getInstance().tryToFly(player);
             }
         }
+    }
+
+    @Inject(method = "handleUseItem", at = @At("HEAD"), cancellable = true)
+    private void disableFireworks(ServerboundUseItemPacket packet, CallbackInfo ci) {
+        ItemStack item = player.getItemInHand(packet.getHand());
+        if (SpawnElytraListener.getInstance().getFlying().contains(player.getUUID()) && item.is(Items.FIREWORK_ROCKET)) ci.cancel();
     }
 
 }
