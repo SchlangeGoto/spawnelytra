@@ -20,24 +20,9 @@ public class ModConfig implements ConfigData {
     @Comment("Enable fall/kinetic damage when flying with the spawn elytra (false by default)")
     public boolean damageEnabled = false;
 
-    @Comment("!!!!!DOES NOT WORK RIGHT NOW Set spawn radius automatically, this uses the spawn protection size (false by default)")
-    public boolean setRadiusAuto = false;
-
     @Comment("Set spawn radius (6 by default)")
     public int spawnRadius = 6;
 
-
-
-
-    @Override
-    public String toString() {
-        return "ModConfig{" +
-                "boostStrength=" + boostStrength +
-                ", boostEnabled=" + boostEnabled +
-                ", setRadiusAuto=" + setRadiusAuto +
-                ", spawnRadius=" + spawnRadius +
-                '}';
-    }
 }
 
 
