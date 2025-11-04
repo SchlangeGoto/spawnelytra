@@ -42,17 +42,20 @@ public class SpawnElytraMod implements ModInitializer {
             });
 
             ServerLivingEntityEvents.ALLOW_DAMAGE.register((entity, source, amount) -> {
-                if (entity instanceof ServerPlayer player) {
-                    if (listener.getFlying().contains(player.getUUID())) {
-                        if (source.is(net.minecraft.world.damagesource.DamageTypes.FALL) || source.is(net.minecraft.world.damagesource.DamageTypes.FLY_INTO_WALL)) {
-                            return false; // cancel damage
+                if (!config.damageEnabled) {
+                    if (entity instanceof ServerPlayer player) {
+                        if (listener.getFlying().contains(player.getUUID())) {
+                            if (source.is(net.minecraft.world.damagesource.DamageTypes.FALL) || source.is(net.minecraft.world.damagesource.DamageTypes.FLY_INTO_WALL)) {
+                                return false; // cancel damage
+                            }
                         }
                     }
                 }
                 return true; // allow other damage
             });
         });
-
-
+    }
+    public static ModConfig getConfig() {
+        return config;
     }
 }

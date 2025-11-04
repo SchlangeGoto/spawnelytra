@@ -1,6 +1,9 @@
 package dev.kkazi.spawnelytra.mixin;
 
 import dev.kkazi.spawnelytra.SpawnElytraListener;
+import dev.kkazi.spawnelytra.SpawnElytraMod;
+import dev.kkazi.spawnelytra.config.ModConfig;
+import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraft.network.protocol.game.ServerboundPlayerAbilitiesPacket;
 import net.minecraft.network.protocol.game.ServerboundUseItemPacket;
 import net.minecraft.server.level.ServerPlayer;
@@ -16,6 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerGamePacketListenerImpl.class)
 public class ServerGamePacketListenerMixin {
+    private static ModConfig config = SpawnElytraMod.getConfig();
 
     @Shadow public ServerPlayer player;
 
@@ -33,8 +37,11 @@ public class ServerGamePacketListenerMixin {
 
     @Inject(method = "handleUseItem", at = @At("HEAD"), cancellable = true)
     private void disableFireworks(ServerboundUseItemPacket packet, CallbackInfo ci) {
-        ItemStack item = player.getItemInHand(packet.getHand());
-        if (SpawnElytraListener.getInstance().getFlying().contains(player.getUUID()) && item.is(Items.FIREWORK_ROCKET)) ci.cancel();
+        if (!config.fireworksEnabled) {
+            ItemStack item = player.getItemInHand(packet.getHand());
+            if (SpawnElytraListener.getInstance().getFlying().contains(player.getUUID()) && item.is(Items.FIREWORK_ROCKET))
+                ci.cancel();
+        }
     }
 
 }
